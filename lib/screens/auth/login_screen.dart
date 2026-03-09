@@ -33,7 +33,16 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
         );
     final state = ref.read(authNotifierProvider);
     if (state.hasError && mounted) {
-      AppUtils.showSnackBar(context, state.error.toString(), isError: true);
+      final error = state.error.toString();
+      if (error.contains('email-not-verified')) {
+        AppUtils.showSnackBar(
+          context,
+          'Please verify your email first. Check your inbox for the verification link.',
+          isError: true,
+        );
+      } else {
+        AppUtils.showSnackBar(context, error, isError: true);
+      }
     }
   }
 

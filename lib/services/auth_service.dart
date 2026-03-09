@@ -43,13 +43,24 @@ class AuthService {
     return userModel;
   }
 
-  // Sign in
+  // Sign in — blocks access if email is not yet verified
   Future<UserCredential> signIn({
     required String email,
     required String password,
-  }) async {
-    return _auth.signInWithEmailAndPassword(email: email, password: password);
-  }
+    }) async {
+      final credential = await _auth.signInWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+      if (!credential.user!.emailVerified) {
+        await _auth.signOut();
+        throw FirebaseAuthException(
+          code: 'email-not-verified',
+          message: 'Please verify your email before signing in. Check your inbox.',
+        );
+      }
+      return credential;
+    }
 
   // Sign out
   Future<void> signOut() async {
