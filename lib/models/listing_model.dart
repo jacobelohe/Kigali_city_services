@@ -1,3 +1,4 @@
+// ListingModel maps Firestore documents to Dart objects and back
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class ListingModel {
