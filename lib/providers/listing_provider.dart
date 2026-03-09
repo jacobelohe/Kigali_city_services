@@ -1,3 +1,5 @@
+// Riverpod providers expose Firestore streams to the UI
+// No screen should import FirestoreService directly
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../models/listing_model.dart';
 import '../models/review_model.dart';
