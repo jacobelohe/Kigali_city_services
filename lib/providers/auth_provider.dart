@@ -73,3 +73,5 @@ final authNotifierProvider =
     StateNotifierProvider<AuthNotifier, AsyncValue<void>>(
   (ref) => AuthNotifier(ref.watch(authServiceProvider)),
 );
+
+final notificationsEnabledProvider = StateProvider<bool>((ref) => true);

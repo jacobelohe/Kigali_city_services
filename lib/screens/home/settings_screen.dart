@@ -10,6 +10,7 @@ class SettingsScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final userProfile = ref.watch(userProfileProvider).value;
+    final notificationsEnabled = ref.watch(notificationsEnabledProvider);
 
     return Scaffold(
       appBar: AppBar(title: const Text('Profile & Settings')),
@@ -100,6 +101,83 @@ class SettingsScreen extends ConsumerWidget {
                   ),
                 ),
                 const SizedBox(height: 24),
+
+                // Preferences section
+                const Padding(
+                  padding: EdgeInsets.only(left: 4, bottom: 8),
+                  child: Text(
+                    'Preferences',
+                    style: TextStyle(
+                        color: AppConstants.textSecondary,
+                        fontSize: 12,
+                        fontWeight: FontWeight.w600,
+                        letterSpacing: 0.8),
+                  ),
+                ),
+
+                // Notification toggle
+                Container(
+                  decoration: BoxDecoration(
+                    color: AppConstants.cardColor,
+                    borderRadius: BorderRadius.circular(14),
+                  ),
+                  child: SwitchListTile(
+                    secondary: Container(
+                      padding: const EdgeInsets.all(8),
+                      decoration: BoxDecoration(
+                        color: AppConstants.accentColor.withOpacity(0.12),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: Icon(
+                        notificationsEnabled
+                            ? Icons.notifications_active_outlined
+                            : Icons.notifications_off_outlined,
+                        color: AppConstants.accentColor,
+                        size: 22,
+                      ),
+                    ),
+                    title: const Text(
+                      'Push Notifications',
+                      style: TextStyle(
+                          color: AppConstants.textPrimary,
+                          fontWeight: FontWeight.w500),
+                    ),
+                    subtitle: Text(
+                      notificationsEnabled
+                          ? 'You will receive listing updates'
+                          : 'Notifications are turned off',
+                      style: const TextStyle(
+                          color: AppConstants.textSecondary, fontSize: 12),
+                    ),
+                    value: notificationsEnabled,
+                    activeColor: AppConstants.accentColor,
+                    onChanged: (val) {
+                      ref
+                          .read(notificationsEnabledProvider.notifier)
+                          .state = val;
+                      AppUtils.showSnackBar(
+                        context,
+                        val
+                            ? 'Notifications enabled'
+                            : 'Notifications disabled',
+                      );
+                    },
+                  ),
+                ),
+                const SizedBox(height: 24),
+
+                // Account section
+                const Padding(
+                  padding: EdgeInsets.only(left: 4, bottom: 8),
+                  child: Text(
+                    'Account',
+                    style: TextStyle(
+                        color: AppConstants.textSecondary,
+                        fontSize: 12,
+                        fontWeight: FontWeight.w600,
+                        letterSpacing: 0.8),
+                  ),
+                ),
 
                 // Settings tiles
                 _SettingsTile(
@@ -211,7 +289,8 @@ class _SettingsTile extends StatelessWidget {
         ),
         child: Icon(icon, color: c, size: 22),
       ),
-      title: Text(title, style: TextStyle(color: c, fontWeight: FontWeight.w500)),
+      title: Text(title,
+          style: TextStyle(color: c, fontWeight: FontWeight.w500)),
       trailing: const Icon(Icons.arrow_forward_ios,
           size: 14, color: AppConstants.textSecondary),
       onTap: onTap,
@@ -223,7 +302,8 @@ class _StatItem extends StatelessWidget {
   final IconData icon;
   final String value;
   final String label;
-  const _StatItem({required this.icon, required this.value, required this.label});
+  const _StatItem(
+      {required this.icon, required this.value, required this.label});
 
   @override
   Widget build(BuildContext context) {
