@@ -1,5 +1,5 @@
-// FirestoreService handles all Firestore read/write operations
-// No UI widget should call Firebase directly use this service instead
+// FirestoreService is the only class that communicates with Firestore directly
+// All CRUD operations for listings and reviews are handled here
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../../models/listing_model.dart';
 import '../../models/review_model.dart';
